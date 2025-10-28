@@ -1,0 +1,34 @@
+<main class="mx-auto max-w-7xl p-8">
+  <section class="text-center mb-10">
+    <h2 class="text-3xl font-semibold text-emerald-600 mb-4">¡Bienvenido a GeoMasters!</h2>
+    <p class="text-gray-700 text-lg">
+      Aprende geografía de manera divertida con juegos de banderas, capitales y más.
+    </p>
+  </section>
+
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <article
+      routerLink="/flags"
+      class="border border-emerald-500 p-6 rounded-2xl hover:shadow-xl hover:bg-emerald-50 transition duration-300 cursor-pointer">
+      <img src="assets/images/banderas-foto.jpg" alt="" class="w-full h-40 object-cover rounded-lg mb-4">
+      <h3 class="text-xl font-semibold mb-2 text-emerald-600">Juego de Banderas</h3>
+      <p class="text-gray-700 mb-4">Pon a prueba tus conocimientos sobre las banderas del mundo.</p>
+    </article>
+
+    <article
+      routerLink="/capitals"
+      class="border border-emerald-500 p-6 rounded-2xl hover:shadow-xl hover:bg-emerald-50 transition duration-300 cursor-pointer">
+      <img src="assets/images/capitales-foto.png" alt="" class="w-full h-40 object-cover rounded-lg mb-4">
+      <h3 class="text-xl font-semibold mb-2 text-emerald-600">Juego de Capitales</h3>
+      <p class="text-gray-700 mb-4">Demuestra cuánto sabes sobre las capitales del mundo.</p>
+    </article>
+
+    <article
+      routerLink="/maps"
+      class="border border-emerald-500 p-6 rounded-2xl hover:shadow-xl hover:bg-emerald-50 transition duration-300 cursor-pointer">
+      <img src="assets/images/mapa-foto.png" alt="" class="w-full h-40 object-cover rounded-lg mb-4">
+      <h3 class="text-xl font-semibold mb-2 text-emerald-600">Juego del Mapa</h3>
+      <p class="text-gray-700 mb-4">Identifica países en el mapa antes de que acabe el tiempo.</p>
+    </article>
+  </section>
+</main>
