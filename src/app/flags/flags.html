@@ -1,1 +1,137 @@
-<p>flags works!</p>
+<main class="mx-auto max-w-7xl p-8">
+  <!-- Pantalla inicial con selector de dificultad -->
+  <section *ngIf="!gameStarted" class="mb-10">
+    <h2 class="text-3xl font-semibold text-emerald-600 mb-4">Juego de Banderas</h2>
+
+    <p class="text-gray-700 text-lg mb-4 text-justify">
+      Aparecerán un total de 20 banderas de diferentes países.
+    </p>
+
+    <p class="text-gray-700 text-lg mb-4 text-justify">
+      Debes seleccionar la opción correcta entre las cuatro alternativas disponibles.
+    </p>
+
+    <p class="text-gray-700 text-lg mb-6 text-justify">
+      Intenta responder correctamente la mayor cantidad posible y demuestra que eres un verdadero experto en banderas.
+    </p>
+
+    <p class="text-gray-700 text-lg mb-6 text-justify">
+      Cada fallo es importante, ¡así que piensa bien antes de responder!
+    </p>
+
+    <!-- Selector de Dificultad -->
+    <div *ngIf="showDifficultySelector" class="mb-8">
+      <h3 class="text-2xl font-semibold text-emerald-600 mb-6">Selecciona el Nivel de Dificultad</h3>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <button
+          *ngFor="let diff of difficulties"
+          (click)="selectDifficulty(diff.value)"
+          [ngClass]="{
+            'border-emerald-700 bg-emerald-100': selectedDifficulty === diff.value,
+            'border-emerald-500 bg-white hover:bg-emerald-100': selectedDifficulty !== diff.value
+          }"
+          class="border p-6 rounded-2xl text-left transition duration-300 cursor-pointer hover:shadow-xl"
+        >
+          <p class="text-xl font-bold text-gray-800 mb-2">{{ diff.label }}</p>
+          <p class="text-gray-600 text-sm">{{ diff.description }}</p>
+        </button>
+      </div>
+    </div>
+
+    <button
+      (click)="startGame()"
+      class="mt-4 bg-emerald-600 text-white text-lg font-semibold px-6 py-3 rounded-xl hover:bg-emerald-700 transition duration-300 cursor-pointer"
+    >
+      Iniciar Juego
+    </button>
+  </section>
+
+  <!-- Pantalla del juego -->
+  <section *ngIf="gameStarted && !gameEnded" class="text-center">
+    <!-- Contadores superior -->
+    <div class="grid grid-cols-3 gap-4 mb-8 bg-gray-200 p-4 rounded-lg">
+      <div class="text-left">
+        <p class="text-gray-600 font-semibold">Tiempo</p>
+        <p class="text-2xl font-bold text-emerald-600">{{ formatTime(timeElapsed) }}</p>
+      </div>
+      <div class="text-center">
+        <p class="text-gray-600 font-semibold">Progreso</p>
+        <p class="text-2xl font-bold text-emerald-600">{{ currentBandera }}/20</p>
+      </div>
+      <div class="text-right">
+        <p class="text-gray-600 font-semibold">Aciertos</p>
+        <p class="text-2xl font-bold text-emerald-600">{{ correctAnswers }}</p>
+      </div>
+    </div>
+
+    <!-- Bandera -->
+    <div class="mb-8">
+      <img 
+        [src]="getFlagUrl()" 
+        [alt]="currentCountryName"
+        class="mx-auto h-40 rounded-lg shadow-lg"
+      />
+    </div>
+
+    <!-- Opciones -->
+    <div class="grid grid-cols-2 gap-4 mb-8">
+      <button
+        *ngFor="let option of options"
+        (click)="selectAnswer(option)"
+        [disabled]="showFeedback"
+        [ngClass]="{
+          'bg-emerald-600 hover:bg-emerald-700': !showFeedback,
+          'bg-green-500': showFeedback && selectedAnswer === option.code && isCorrect,
+          'bg-red-500': showFeedback && selectedAnswer === option.code && !isCorrect,
+          'bg-gray-400': showFeedback && selectedAnswer !== option.code && option.code === currentCountryCode,
+          'bg-gray-300': showFeedback && selectedAnswer !== option.code && option.code !== currentCountryCode
+        }"
+        class="text-white text-lg font-semibold px-6 py-3 rounded-lg transition duration-300 cursor-pointer disabled:cursor-not-allowed"
+      >
+        {{ option.name }}
+      </button>
+    </div>
+  </section>
+
+  <!-- Pantalla de fin de juego -->
+  <section *ngIf="gameEnded" class="text-center mb-10">
+    <h2 class="text-3xl font-semibold text-emerald-600 mb-6">Juego Finalizado</h2>
+
+    <div class="bg-gray-200 p-8 rounded-lg mb-8">
+      <div class="grid grid-cols-3 gap-4 mb-6">
+        <div>
+          <p class="text-gray-600 font-semibold mb-2">Tiempo Total</p>
+          <p class="text-3xl font-bold text-emerald-600">{{ formatTime(timeElapsed) }}</p>
+        </div>
+        <div>
+          <p class="text-gray-600 font-semibold mb-2">Banderas Completadas</p>
+          <p class="text-3xl font-bold text-emerald-600">{{ currentBandera - 1 }}/20</p>
+        </div>
+        <div>
+          <p class="text-gray-600 font-semibold mb-2">Aciertos</p>
+          <p class="text-3xl font-bold text-emerald-600">{{ correctAnswers }}/20</p>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <p class="text-gray-700 text-lg mb-2">Porcentaje de Aciertos</p>
+        <p class="text-4xl font-bold text-emerald-600">{{ (correctAnswers / 20 * 100) | number:'1.0-0' }}%</p>
+      </div>
+    </div>
+
+    <button
+      (click)="restartGame()"
+      class="bg-emerald-600 text-white text-lg font-semibold px-8 py-4 rounded-xl hover:bg-emerald-700 transition duration-300 cursor-pointer"
+    >
+      Jugar de Nuevo
+    </button>
+
+    <button
+      (click)="goToHome()"
+      class="bg-emerald-600 text-white text-lg font-semibold ml-4 px-8 py-4 rounded-xl hover:bg-emerald-700 transition duration-300 cursor-pointer"
+    >
+      Volver al Inicio
+    </button>
+  </section>
+</main>

@@ -8,5 +8,5 @@ export const routes: Routes = [
   { path: '', component: Landing, title: 'GeoMasters'},
   { path: 'flags', component: Flags},
   { path: 'capitals', component: Capitals},
-  { path: 'map', component: Maps},
+  { path: 'maps', component: Maps},
 ];
